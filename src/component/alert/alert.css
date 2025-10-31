@@ -1,0 +1,35 @@
+.alert-overlay {
+  position: fixed;
+  inset: 0; 
+  background: rgba(44, 43, 43, 0.4); 
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixed-alert {
+  position: relative;
+  z-index: 9999;
+  width: 80%;
+  max-width: 400px;
+  padding: 16px;
+  background-color: #e6f4ff;
+  color: #0b3d91;
+  border-left: 6px solid #2196f3;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.closebtn {
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.closebtn:hover {
+  color: red;
+}
