@@ -6,11 +6,12 @@ import "../component/spinner.css";
 const SingleCoinData = ({ clickedItem, onClose }) => {
   const [coinData, setCoinData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   const handleFetchCoinData = async (id) => {
     if (!id) return;
     
     setIsLoading(true);
+      delay(2000)
     try {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily`
