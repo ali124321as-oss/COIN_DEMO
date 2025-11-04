@@ -59,9 +59,9 @@ const SearchBar = ({
   }, [timeoutId]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-3 items-center justify-center mt-6 mb-4 mx-auto max-w-[1200px] w-full px-4 sm:px-6">
+    <div className="flex flex-col md:flex-row gap-3  justify-between mt-6 mb-4 mx-auto max-w-[1200px] w-full px-4 sm:px-6">
       {/* Search Input */}
-      <div className="flex-1 w-full max-w-2xl">
+      <div className="flex-1 w-full max-w-5xl">
         <input
           type="text"
           value={searchedValue}
