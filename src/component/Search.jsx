@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const SearchBar = ({ 
   filterCoinBySearchedValue, 
@@ -10,7 +11,9 @@ const SearchBar = ({
   hasSearched,
   isLoading 
 }) => {
-
+  const allCoinSliceStates = useSelector((state) => state.coinsSlice);
+  const theme = allCoinSliceStates.theme;
+  
   const [timeoutId, setTimeoutId] = useState(null);
 
   const handleFilter = (value) => {
@@ -68,7 +71,11 @@ const SearchBar = ({
           onChange={handleChange}
           onKeyDown={handleKeyDown} 
           placeholder={placeholder || "Search..."}
-          className="border border-gray-300 bg-white px-4 py-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base"
+          className={`border border-gray-300 px-4 py-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base ${
+            theme === "black" 
+              ? "bg-gray-800 text-white placeholder-gray-400 border-gray-600" 
+              : "bg-white text-gray-900 placeholder-gray-500"
+          }`}
         />
       </div>
 
@@ -79,7 +86,11 @@ const SearchBar = ({
             value={sortBy}
             onChange={handleSortChange}
             disabled={isLoading}
-            className="border border-gray-300 bg-white px-4 py-3 rounded-lg w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`border border-gray-300 px-4 py-3 rounded-lg w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${
+              theme === "black" 
+                ? "bg-gray-800 text-white border-gray-600" 
+                : "bg-white text-gray-900"
+            }`}
           >
             <option value="">Sort by...</option>
             <option value="price">Sort by Price</option>
