@@ -25,12 +25,12 @@ const SearchBar = ({
 
   const handleChange = (e) => {
     const val = e.target.value;
-    setSearchedValue(val); // Update UI immediately
+    setSearchedValue(val);
     
     if (timeoutId) clearTimeout(timeoutId);
 
     const newTimeoutId = setTimeout(() => {
-      handleFilter(val); // Filter after delay only if length > 0
+      handleFilter(val);
     }, 500);
     
     setTimeoutId(newTimeoutId);
@@ -38,12 +38,10 @@ const SearchBar = ({
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      // Clear any pending timeout
       if (timeoutId) {
         clearTimeout(timeoutId);
         setTimeoutId(null);
       }
-      // Trigger filter immediately on Enter
       handleFilter(searchedValue);
       console.log("Enter pressed - immediate filter");
     }
@@ -51,7 +49,10 @@ const SearchBar = ({
 
   const handleSortChange = (e) => {
     const value = e.target.value;
-    onSort(value); // Call onSort for all values including "none"
+    // Call the onSort function passed from Home.js
+    if (onSort) {
+      onSort(value);
+    }
   };
 
   // Clean up timer when unmounted
@@ -61,9 +62,12 @@ const SearchBar = ({
     };
   }, [timeoutId]);
 
+  // Check if there is searched data using the imported searchedValue prop
+  const hasSearchData = searchedValue.trim().length > 0;
+
   return (
     <div className="flex flex-col md:flex-row gap-3  justify-between mt-6 mb-4 mx-auto max-w-[1200px] w-full px-4 sm:px-6">
-      {/* Search Input */}
+      {/* Search Input - Always visible, even when loading */}
       <div className="flex-1 w-full max-w-5xl">
         <input
           type="text"
@@ -71,7 +75,8 @@ const SearchBar = ({
           onChange={handleChange}
           onKeyDown={handleKeyDown} 
           placeholder={placeholder || "Search..."}
-          className={`border border-gray-300 px-4 py-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base ${
+          disabled={isLoading}
+          className={`border border-gray-300 px-4 py-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${
             theme === "black" 
               ? "bg-gray-800 text-white placeholder-gray-400 border-gray-600" 
               : "bg-white text-gray-900 placeholder-gray-500"
@@ -79,11 +84,11 @@ const SearchBar = ({
         />
       </div>
 
-      {/* Sort Dropdown - Hidden when searching */}
-      {!hasSearched && (
+      {/* Sort Dropdown - Hidden when searching, when there is search data, or when loading */}
+      {!hasSearched && !hasSearchData && !isLoading && (
         <div className="w-full sm:w-auto">
           <select
-            value={sortBy}
+            value={sortBy} // Use the imported sortBy prop directly
             onChange={handleSortChange}
             disabled={isLoading}
             className={`border border-gray-300 px-4 py-3 rounded-lg w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${

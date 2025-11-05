@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CreateGraph from "../component/CreateGraph";
 import "../component/spinner.css";
-
+import { getSession, setSession } from "../redux_store/Storage";
+    
 const SingleCoinData = ({ clickedItem, onClose }) => {
-  const [coinData, setCoinData] = useState(null);
+  const [coinData, setCoinData] = useState(() => getSession("coinData", null));
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedDays, setSelectedDays] = useState(7);
+  const [selectedDays, setSelectedDays] = useState(() => getSession("selectedChartDays", 7));
+
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
        
   const handleFetchCoinData = async (id, days = 7) => {
@@ -34,6 +36,15 @@ const SingleCoinData = ({ clickedItem, onClose }) => {
       handleFetchCoinData(clickedItem.id, days);
     }
   };
+
+  // Persist states to session storage
+  useEffect(() => {
+    setSession("selectedChartDays", selectedDays);
+  }, [selectedDays]);
+
+  useEffect(() => {
+    setSession("coinData", coinData);
+  }, [coinData]);
 
   useEffect(() => {
     if (clickedItem && clickedItem.id) {

@@ -16,7 +16,6 @@ export const setSession = (key, value) => {
     // ignore
   }
 };
-    
 
 export const getLocal = (key, fallback) => {
   try {
