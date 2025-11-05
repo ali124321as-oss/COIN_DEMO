@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Pagination = ({
   page,
@@ -11,6 +12,9 @@ const Pagination = ({
   message = "",
   endMessage = "",
 }) => {
+  const allCoinSliceStates = useSelector((state) => state.coinsSlice);
+  const theme = allCoinSliceStates.theme;
+  
   const totalPages = total ? Math.ceil(total / perPage) : null;
 
   // Don't show anything during loading
@@ -30,7 +34,11 @@ const Pagination = ({
           Prev
         </button>
 
-        <span className="text-gray-700 font-medium">
+        <span className={`font-medium ${
+          theme === "black" 
+            ? "text-white" 
+            : "text-gray-700"
+        }`}>
           Page {page} {totalPages && `of ${totalPages}`}
         </span>
 
@@ -45,8 +53,18 @@ const Pagination = ({
 
       {/* End message below the buttons */}
       {endMessage && (
-        <div className="flex justify-center items-center w-full mt-3 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
-          <p className="text-red-600 font-semibold text-lg">{endMessage}</p>
+        <div className={`flex justify-center items-center w-full mt-3 p-4 border rounded-lg ${
+          theme === "black" 
+            ? "bg-yellow-900 border-yellow-700" 
+            : "bg-yellow-100 border-yellow-300"
+        }`}>
+          <p className={`font-semibold text-lg ${
+            theme === "black" 
+              ? "text-yellow-300" 
+              : "text-red-600"
+          }`}>
+            {endMessage}
+          </p>
         </div>
       )}
     </div>
