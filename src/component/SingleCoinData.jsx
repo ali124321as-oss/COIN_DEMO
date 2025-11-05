@@ -6,15 +6,17 @@ import "../component/spinner.css";
 const SingleCoinData = ({ clickedItem, onClose }) => {
   const [coinData, setCoinData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDays, setSelectedDays] = useState(7);
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-  const handleFetchCoinData = async (id) => {
+       
+  const handleFetchCoinData = async (id, days = 7) => {
     if (!id) return;
     
     setIsLoading(true);
-      delay(2000)
+    await delay(2000);
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily`
+        `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}&interval=daily`
       );
       const data = response.data;
       setCoinData(data);
@@ -26,9 +28,16 @@ const SingleCoinData = ({ clickedItem, onClose }) => {
     }
   };
 
+  const handleDaysChange = (days) => {
+    setSelectedDays(days);
+    if (clickedItem && clickedItem.id) {
+      handleFetchCoinData(clickedItem.id, days);
+    }
+  };
+
   useEffect(() => {
     if (clickedItem && clickedItem.id) {
-      handleFetchCoinData(clickedItem.id);
+      handleFetchCoinData(clickedItem.id, selectedDays);
     }
   }, [clickedItem]);
 
@@ -138,9 +147,25 @@ const SingleCoinData = ({ clickedItem, onClose }) => {
 
             {/* Chart Section */}
             <div className="px-6 py-6">
-              <h2 className="text-xl font-bold text-gray-800">
-                Price Chart (7days)
-              </h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <h2 className="text-xl font-bold text-gray-800">
+                  Price Chart of {selectedDays} days
+                </h2>
+                <div className="flex items-center gap-2">
+                  <select 
+                    value={selectedDays}
+                    onChange={(e) => handleDaysChange(Number(e.target.value))}
+                    className="w-32 px-8 py-2 border-2 border-blue-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-600 text-gray-800 bg-white font-medium shadow-sm hover:border-blue-600 transition-colors duration-200 cursor-pointer"
+                  >
+                    <option value={7}>7 days</option>
+                    <option value={10}>10 days</option>
+                    <option value={20}>20 days</option>
+                    <option value={30}>30 days</option>
+                    <option value={40}>40 days</option>
+                    <option value={50}>50 days</option>
+                  </select>
+                </div>
+              </div>
               <div className="bg-gray-50 p-6">
                 {coinData && coinData.prices ? (
                   <CreateGraph prices={coinData.prices} />
@@ -150,7 +175,7 @@ const SingleCoinData = ({ clickedItem, onClose }) => {
                       <span className="text-2xl">⏳</span>
                     </div>
                     <p className="text-gray-700 font-medium">
-                    Data not Found 
+                      Data not Found 
                     </p>
                   </div>
                 )}

@@ -14,21 +14,22 @@ const App = () => {
   // Apply theme to document.body
   useEffect(() => {
     if (theme === "black") {
-      document.body.classList.add("bg-black");
+      document.body.classList.add("bg-gradient-to-br", "from-gray-900", "via-gray-700", "to-gray-800");
       document.body.classList.remove("bg-white");
- 
+      document.body.style.backgroundAttachment = "fixed";
     } else {
       document.body.classList.add("bg-white");
-      document.body.classList.remove("bg-black");
-
+      document.body.classList.remove("bg-gradient-to-br", "from-gray-900", "via-gray-700", "to-gray-800");
+      document.body.style.backgroundAttachment = "";
     }
-    
-  
-   
   }, [theme]);
 
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen transition-all duration-500 ${
+      theme === "black" 
+        ? "bg-gradient-to-br from-gray-900 via-gray-700 to-gray-800 text-white" 
+        : "bg-white text-gray-900"
+    }`}>
       <BrowserRouter>
         <Navbar />
         <Routes>
